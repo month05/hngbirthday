@@ -9,36 +9,34 @@
              "gift" (ảnh/phần món quà), "caption" (chú thích dưới ảnh quà), "sign" (chữ ký cuối trang),
              "under-photo" (hàng bên dưới tấm ảnh đầu tiên)
      corner  góc của chỗ đó: "tl" trên-trái, "tr" trên-phải, "bl" dưới-trái, "br" dưới-phải
-     size    chiều rộng hiển thị, tính bằng px (khoảng 70-110 là hợp)
+     size    chiều rộng hiển thị, tính bằng px
      rotate  độ nghiêng, ví dụ 12 hoặc -8
-     inline  true = đặt cùng dòng, ngay sau chữ (dùng với at: "caption"; bỏ qua corner)
-     alt     mô tả ngắn; để "" nếu chỉ để trang trí
-
-   Sticker đè lên góc nên nhô ra ngoài một chút. File sai đường dẫn sẽ tự biến mất, không hiện icon ảnh lỗi. */
+     inline  true = đặt cùng dòng, ngay sau chữ
+     alt     mô tả ngắn; để "" nếu chỉ để trang trí */
 (function () {
   const STICKERS = [
-    { src: "", at: "photo", corner: "tr", size: 96, rotate: 12,  alt: "" },
-    { src: "", at: "name",  corner: "tr", size: 80, rotate: -8,  alt: "" },
+    { src: "", at: "photo", corner: "tr", size: 96, rotate: 12, alt: "" },
+    { src: "", at: "name", corner: "tr", size: 80, rotate: -8, alt: "" },
     { src: "images/a.gif", at: "caption", inline: true, size: 44, rotate: 0, alt: "" },
-    { src: "", at: "cover", corner: "br", size: 88, rotate: 10,  alt: "" },
-    { src: "images/b.gif", at: "under-photo", side: "left",  size: 90, rotate: -5, alt: "Thỏ trái" },
-    { src: "images/c.gif", at: "under-photo", side: "right", size: 90, rotate: 8,  alt: "Thỏ phải" }
+    { src: "", at: "cover", corner: "br", size: 88, rotate: 10, alt: "" },
+    { src: "images/b.gif", at: "under-photo", side: "left", size: 100, rotate: -5, alt: "Thỏ trái" },
+    { src: "images/c.gif", at: "under-photo", side: "right", size: 100, rotate: 8, alt: "Thỏ phải" }
   ];
 
   const q = s => document.querySelector(s);
   const HOSTS = {
     cover: () => q(".patch"),
-    name:  () => q("#name"),
+    name: () => q("#name"),
     photo: () => q("#togetherSlot .photo"),
     "under-photo": () => q("#togetherSlot"),
-    gift:  () => q("#giftPhotoSlot .photo") || q("#giftTitle"),
+    gift: () => q("#giftPhotoSlot .photo") || q("#giftTitle"),
     caption: () => q("#giftPhotoSlot figcaption"),
-    sign:  () => q("#from")
+    sign: () => q("#from")
   };
   const CORNER = {
-    tl: ["top:0;left:0",     "-30%,-30%"],
-    tr: ["top:0;right:0",    "30%,-30%"],
-    bl: ["bottom:0;left:0",  "-30%,30%"],
+    tl: ["top:0;left:0", "-30%,-30%"],
+    tr: ["top:0;right:0", "30%,-30%"],
+    bl: ["bottom:0;left:0", "-30%,30%"],
     br: ["bottom:0;right:0", "30%,30%"]
   };
 
@@ -46,8 +44,9 @@
   st.textContent =
     "body{overflow-x:clip}" +
     ".sticker{position:absolute;z-index:3;height:auto;pointer-events:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.28))}" +
-    ".sticker-row{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:0;min-height:90px;margin:14px 10px 0}" +
+    ".sticker-row{position:relative;display:flex;align-items:flex-end;justify-content:center;min-height:100px;margin:14px 0 0}" +
     ".sticker-row .sticker{position:static;display:block;flex:0 0 auto}" +
+    ".sticker-row .sticker + .sticker{margin-left:-24px}" +
     ".sticker.vid{box-sizing:border-box;background:#fff;border:4px solid #fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.28);filter:none}";
   document.head.appendChild(st);
 
@@ -98,7 +97,7 @@
     el.onerror = () => { console.warn("Không tải được sticker:", s.src); el.remove(); };
 
     if (s.at === "under-photo") {
-      el.style.cssText = "width:" + (s.size || 90) + "px;height:auto;transform:rotate(" + (s.rotate || 0) + "deg)";
+      el.style.cssText = "width:" + (s.size || 100) + "px;height:auto;transform:rotate(" + (s.rotate || 0) + "deg)";
       if (s.side === "right") host.appendChild(el);
       else host.insertBefore(el, host.firstChild);
       return;

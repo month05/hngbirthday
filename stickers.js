@@ -42,12 +42,18 @@
 
   const st = document.createElement("style");
   st.textContent =
-    "body{overflow-x:clip}" +
-    ".sticker{position:absolute;z-index:3;height:auto;pointer-events:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.28))}" +
-    ".sticker-row{position:relative;display:flex;align-items:flex-end;justify-content:center;min-height:100px;margin:14px 0 0}" +
+    "body{overflow-x:hidden;overflow-x:clip}" +
+    ".sticker{position:absolute;z-index:3;height:auto;max-width:none;pointer-events:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.28))}" +
+    ".sticker-row{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;min-height:100px;margin:14px auto 0;overflow:visible}" +
     ".sticker-row .sticker{position:static;display:block;flex:0 0 auto}" +
     ".sticker-row .sticker + .sticker{margin-left:-24px}" +
-    ".sticker.vid{box-sizing:border-box;background:#fff;border:4px solid #fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.28);filter:none}";
+    ".sticker.vid{box-sizing:border-box;background:#fff;border:4px solid #fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.28);filter:none}" +
+    "@media (max-width:600px){" +
+      "body{overflow-x:hidden}" +
+      ".sticker-row{width:calc(100% - 16px);min-height:clamp(72px,24vw,100px);margin-top:10px}" +
+      ".sticker-row .sticker{width:clamp(72px,24vw,100px)!important;height:auto}" +
+      ".sticker-row .sticker + .sticker{margin-left:clamp(-20px,-5vw,-12px)}" +
+    "}";
   document.head.appendChild(st);
 
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;

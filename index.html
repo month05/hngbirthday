@@ -195,6 +195,11 @@ main.pre .wrap>:not(.cake-wrap),main.pre .sp{display:none}
 
     <div class="cut" aria-hidden="true"></div>
 
+    <h2 id="noteTitle"></h2>
+    <p class="story" id="noteText"></p>
+
+    <div class="cut" aria-hidden="true"></div>
+
     <h2 id="giftTitle"></h2>
     <p class="story" id="giftStory"></p>
     <div id="giftPhotoSlot"></div>
@@ -216,6 +221,8 @@ const CONFIG = {
   name: "hng, Nguyễn Hiếu Ngân",
   from: "— Mon",
   wish: "Chúc bé một tuổi mới thật nhiều sức khoẻ, bình yên và những điều vui bất ngờ. Cảm ơn vì đã luôn ở đó. Lớn hơn một chút rồi sau đừng có đánh anh nhé!!!",
+  noteTitle: "Đôi lời muốn nói",
+  noteText: "Mình yêu bạn. Thật trùng hợp là chúng ta cũng sắp kỉ niệm nửa năm. Thật sự mọi thứ cứ như một giấc mơ vậy. Có lẽ mình nói điều này nhiều rồi, nhưng mà, mình của nửa năm trước sẽ không tin được những gì đang diễn ra đâu",   // viết lời nhắn của bạn vào đây, xuống dòng bằng \n
   giftTitle: "Quà của bạn đây",
   giftStory: "Mỗi chi tiết của món quà này đều được làm thủ công, từng chút một. Thật ra mình hơi vội vì trễ quá rồi, cái này là mình cũng mới nghĩ ra thôi. Tất cả mọi thứ đều rất vội vã, vì thế nó không được hoàn hảo như mình mong muốn. Nhưng mình vẫn muốn gửi đến bạn món quà này, vì nó là tất cả những gì mình có thể làm cho bạn lúc này. Mong bạn thích nó.( Mình thấy nó cũng đẳng cấp mà). Đi ship quà thôi",
   videoUrl: "https://www.youtube.com/watch?v=PdDikt23Ugo",
@@ -246,6 +253,9 @@ const CONFIG = {
   $("coverName").textContent = CONFIG.name;
   $("name").textContent = CONFIG.name + ",";
   $("wish").textContent = CONFIG.wish;
+  $("noteTitle").textContent = CONFIG.noteTitle;
+  $("noteText").textContent = CONFIG.noteText || "(Viết đôi lời của bạn vào noteText trong index.html)";
+  $("noteText").style.whiteSpace = "pre-line";
   $("giftTitle").textContent = CONFIG.giftTitle;
   $("giftStory").textContent = CONFIG.giftStory;
   $("from").textContent = CONFIG.from;
@@ -445,7 +455,7 @@ const CONFIG = {
     const ro = new IntersectionObserver(es => es.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add("in"); ro.unobserve(e.target); }
     }), { threshold: .15 });
-    document.querySelectorAll(".cake-wrap,.wish,#togetherSlot,#giftTitle,.story,#giftPhotoSlot,#video,.sign")
+    document.querySelectorAll(".cake-wrap,.wish,#togetherSlot,#noteTitle,#giftTitle,.story,#giftPhotoSlot,#video,.sign")
       .forEach(el => { el.classList.add("rise"); ro.observe(el); });
   }
   const sp = $("sp");

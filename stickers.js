@@ -6,10 +6,11 @@
    Mỗi sticker là một dòng trong STICKERS bên dưới:
      src     đường dẫn file, ví dụ "images/meo.gif". Để "" thì bỏ qua sticker đó.
      at      dán vào đâu: "cover" (mảnh vải mở đầu), "name" (dòng tên), "photo" (khung ảnh chung),
-             "gift" (ảnh/phần món quà), "sign" (chữ ký cuối trang)
+             "gift" (ảnh/phần món quà), "caption" (chú thích dưới ảnh quà), "sign" (chữ ký cuối trang)
      corner  góc của chỗ đó: "tl" trên-trái, "tr" trên-phải, "bl" dưới-trái, "br" dưới-phải
      size    chiều rộng hiển thị, tính bằng px (khoảng 70-110 là hợp)
      rotate  độ nghiêng, ví dụ 12 hoặc -8
+     inline  true = đặt cùng dòng, ngay sau chữ (dùng với at: "caption"; bỏ qua corner)
      alt     mô tả ngắn; để "" nếu chỉ để trang trí
 
    Sticker đè lên góc nên nhô ra ngoài một chút. File sai đường dẫn sẽ tự biến mất, không hiện icon ảnh lỗi. */
@@ -17,7 +18,7 @@
   const STICKERS = [
     { src: "", at: "photo", corner: "tr", size: 96, rotate: 12,  alt: "" },
     { src: "", at: "name",  corner: "tr", size: 80, rotate: -8,  alt: "" },
-    { src: "a.gif", at: "gift",  corner: "bl", size: 84, rotate: -10, alt: "" },
+    { src: "a.gif", at: "caption", inline: true, size: 44, rotate: -10, alt: "" },
     { src: "", at: "cover", corner: "br", size: 88, rotate: 10,  alt: "" }
   ];
 
@@ -27,6 +28,7 @@
     name:  () => q("#name"),
     photo: () => q("#togetherSlot .photo"),
     gift:  () => q("#giftPhotoSlot .photo") || q("#giftTitle"),
+    caption: () => q("#giftPhotoSlot figcaption"),
     sign:  () => q("#from")
   };
   const CORNER = {
@@ -77,6 +79,12 @@
     el.className = "sticker" + (isVid ? " vid" : "");
     el.onerror = () => { console.warn("Không tải được sticker:", s.src); el.remove(); };
 
+    if (s.inline) {
+      el.style.cssText = "position:static;display:inline-block;vertical-align:middle;margin:-8px 0 -8px 8px;width:" +
+        (s.size || 44) + "px;transform:rotate(" + (s.rotate || 0) + "deg)";
+      host.appendChild(el);
+      return;
+    }
     const c = CORNER[s.corner] || CORNER.tr;
     el.style.cssText = "width:" + (s.size || 90) + "px;" + c[0] +
       ";transform:translate(" + c[1] + ") rotate(" + (s.rotate || 0) + "deg)";

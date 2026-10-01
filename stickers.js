@@ -46,7 +46,7 @@
   st.textContent =
     "body{overflow-x:clip}" +
     ".sticker{position:absolute;z-index:3;height:auto;pointer-events:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.28))}" +
-    ".sticker-row{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;min-height:90px;margin:14px 10px 0}" +
+    ".sticker-row{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:0;min-height:90px;margin:14px 10px 0}" +
     ".sticker-row .sticker{position:static;display:block;flex:0 0 auto}" +
     ".sticker.vid{box-sizing:border-box;background:#fff;border:4px solid #fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.28);filter:none}";
   document.head.appendChild(st);

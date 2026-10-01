@@ -280,7 +280,7 @@ const CONFIG = {
       if (!$("ans").value.trim()) return;
       if (norm($("ans").value) === norm(Q.answer)) return showPull("Đúng rồi! Giờ kéo sợi chỉ xuống để mở quà.");
       tries++;
-      $("qMsg").textContent = "Chưa đúng, thử lại nhé." + (tries >= 2 && Q.hint ? " Gợi ý: " + Q.hint : "");
+      $("qMsg").textContent = "Vl bạn không thương mình." + (tries >= 2 && Q.hint ? " Gợi ý: " + Q.hint : "");
       if (tries >= 3) $("skip").hidden = false;
       $("ans").select();
     };

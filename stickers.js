@@ -18,7 +18,7 @@
   const STICKERS = [
     { src: "", at: "photo", corner: "tr", size: 96, rotate: 12,  alt: "" },
     { src: "", at: "name",  corner: "tr", size: 80, rotate: -8,  alt: "" },
-    { src: "a.gif", at: "caption", inline: true, size: 44, rotate: -10, alt: "" },
+    { src: "a.gif", at: "caption", inline: true, size: 44, rotate: 0, alt: "" },
     { src: "", at: "cover", corner: "br", size: 88, rotate: 10,  alt: "" }
   ];
 

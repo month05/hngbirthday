@@ -90,14 +90,28 @@ h2{margin:0 0 8px;font-size:1.15rem;font-weight:500}
 .sp::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--thread)}
 .rise{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .rise.in{opacity:1;transform:none}
-.cake-wrap{margin:30px 0 8px;text-align:center}
-.cake{display:block;width:min(230px,70%);margin:0 auto;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cake-wrap{position:relative;z-index:5;margin:30px 0 8px;text-align:center}
+.cake{display:block;width:min(260px,76%);margin:0 auto;padding:0;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .cake svg{display:block;width:100%;height:auto;overflow:visible}
 .cake:focus-visible{outline:3px solid var(--ink);outline-offset:6px;border-radius:12px}
-.fl{transform-box:fill-box;transform-origin:50% 100%;transition:opacity .35s,transform .35s;animation:flick 1.1s ease-in-out infinite alternate}
+.halo{opacity:0;transition:opacity 1s}
+body.night .halo{opacity:1}
+.cf{opacity:0;transform:scale(.3);transform-box:fill-box;transform-origin:50% 100%;transition:opacity .3s,transform .3s}
+.cf.on{opacity:1;transform:none}
+.fl{transform-box:fill-box;transform-origin:50% 100%;animation:flick 1.1s ease-in-out infinite alternate}
 @keyframes flick{from{transform:scaleY(.92) rotate(-3deg)}to{transform:scaleY(1.1) rotate(3deg)}}
-.cake.out .fl{opacity:0;transform:scale(.2);animation:none}
-.cake-note{margin:6px 0 0;font-size:1.5rem;line-height:1.2;color:var(--muted)}
+.cake.blow .cf.on{opacity:0;transform:translateX(10px) scaleY(.5) skewX(-30deg);transition:.6s;transition-delay:var(--d)}
+.sm{fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;opacity:0;transform-box:fill-box}
+.cake.blow .sm{animation:smoke .9s ease-out}
+@keyframes smoke{from{opacity:.7;transform:none}to{opacity:0;transform:translateY(-26px) scale(1.4)}}
+.t{transform-box:fill-box;transform-origin:50% 100%}
+.cake.pop .t{animation:pop .65s cubic-bezier(.3,1.7,.5,1) var(--d) both}
+@keyframes pop{35%{transform:scale(1.09,.86)}to{transform:none}}
+#dim{position:fixed;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .9s;background:radial-gradient(ellipse at 50% 40%,rgba(18,25,54,.45),rgba(5,8,22,.88))}
+body.night #dim{opacity:1}
+canvas#fx{z-index:9}
+.cake-note{margin:8px 0 0;font-size:1.5rem;line-height:1.2;color:var(--muted);transition:color .6s}
+body.night .cake-note{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)}
 
 #fx{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5}
 
@@ -149,20 +163,28 @@ h2{margin:0 0 8px;font-size:1.15rem;font-weight:500}
     </svg>
 
     <div class="cake-wrap">
-      <button class="cake" id="cake" type="button" aria-pressed="false" aria-label="Thổi nến">
-        <svg viewBox="0 0 200 165" aria-hidden="true">
-          <ellipse cx="100" cy="152" rx="88" ry="9" style="fill:var(--ink)" opacity=".18"/>
-          <g stroke-width="2.5" stroke-dasharray="6 5" stroke-linejoin="round" style="stroke:var(--ink)">
-            <rect x="26" y="98" width="148" height="50" rx="10" style="fill:var(--cloth)"/>
-            <rect x="52" y="62" width="96" height="38" rx="10" style="fill:var(--cloth)"/>
+      <button class="cake" id="cake" type="button" aria-label="Thắp nến">
+        <svg viewBox="0 0 220 190" aria-hidden="true">
+          <defs><radialGradient id="hg"><stop offset="0" stop-color="#f4b63f" stop-opacity=".6"/><stop offset="1" stop-color="#f4b63f" stop-opacity="0"/></radialGradient></defs>
+          <circle class="halo" cx="110" cy="70" r="120" fill="url(#hg)"/>
+          <ellipse cx="110" cy="178" rx="98" ry="9" style="fill:var(--ink)" opacity=".18"/>
+          <g class="t" style="--d:0s">
+            <rect x="20" y="122" width="180" height="48" rx="11" stroke-width="2.5" stroke-dasharray="6 5" style="fill:var(--cloth);stroke:var(--ink)"/>
+            <path d="M20 136q15 16 30 0t30 0t30 0t30 0t30 0t30 0" fill="none" stroke-width="4" stroke-linecap="round" style="stroke:var(--thread)"/>
+            <g fill="none" stroke-width="3" stroke-linecap="round"><path stroke="#f4b63f" d="M38 154l5-3M96 158l5 3M150 153l5-3M184 158l4 3"/><path stroke="#ff7a9c" d="M60 160l5-2M122 152l4 4M170 162l5-3"/><path stroke="#6fd3ff" d="M78 152l4-3M138 162l5-1M32 164l4 3"/></g>
           </g>
-          <path d="M52 74Q52 62 64 62H136Q148 62 148 74V78Q142 90 135 78Q128 92 120 78Q112 90 104 78Q96 92 88 78Q80 90 73 78Q66 90 59 78Q52 82 52 78Z" style="fill:var(--thread)"/>
-          <path d="M26 112q12 14 24 0t24 0t24 0t24 0t24 0t24 0" fill="none" stroke-width="4" stroke-linecap="round" style="stroke:var(--thread)"/>
-          <g style="fill:var(--ink)"><rect x="77" y="36" width="6" height="28" rx="2"/><rect x="97" y="36" width="6" height="28" rx="2"/><rect x="117" y="36" width="6" height="28" rx="2"/></g>
-          <g fill="#f4b63f"><ellipse class="fl" cx="80" cy="27" rx="5" ry="8"/><ellipse class="fl" cx="100" cy="27" rx="5" ry="8" style="animation-delay:-.4s"/><ellipse class="fl" cx="120" cy="27" rx="5" ry="8" style="animation-delay:-.8s"/></g>
+          <g class="t" style="--d:.08s">
+            <rect x="46" y="86" width="128" height="38" rx="10" stroke-width="2.5" stroke-dasharray="6 5" style="fill:var(--cloth);stroke:var(--ink)"/>
+            <g style="fill:var(--thread)"><path d="M46 98Q46 86 58 86H162Q174 86 174 98V100H46Z"/><rect x="60" y="98" width="9" height="13" rx="4.5"/><rect x="96" y="98" width="9" height="17" rx="4.5"/><rect x="132" y="98" width="9" height="12" rx="4.5"/><rect x="156" y="98" width="9" height="15" rx="4.5"/></g>
+          </g>
+          <g class="t" style="--d:.16s">
+            <rect x="72" y="54" width="76" height="34" rx="10" stroke-width="2.5" stroke-dasharray="6 5" style="fill:var(--cloth);stroke:var(--ink)"/>
+            <g style="fill:var(--thread)"><path d="M72 66Q72 54 84 54H136Q148 54 148 66V68H72Z"/><rect x="80" y="66" width="8" height="12" rx="4"/><rect x="104" y="66" width="8" height="16" rx="4"/><rect x="128" y="66" width="8" height="10" rx="4"/></g>
+          </g>
+          <rect x="86" y="30" width="6" height="26" rx="2" style="fill:var(--ink)"/><path d="M89 30v-4" stroke-width="1.5" style="stroke:var(--ink)"/><path class="sm" d="M89 24q-5-7 0-13t0-13"/><g class="cf" style="--d:0s"><circle cx="89" cy="20" r="15" fill="url(#hg)"/><ellipse class="fl" cx="89" cy="20" rx="4.5" ry="8" fill="#f4b63f" style="animation-delay:-0s"/><ellipse class="fl" cx="89" cy="22" rx="2" ry="4.5" fill="#fff3c4"/></g><rect x="107" y="30" width="6" height="26" rx="2" style="fill:var(--ink)"/><path d="M110 30v-4" stroke-width="1.5" style="stroke:var(--ink)"/><path class="sm" d="M110 24q-5-7 0-13t0-13"/><g class="cf" style="--d:0.15s"><circle cx="110" cy="20" r="15" fill="url(#hg)"/><ellipse class="fl" cx="110" cy="20" rx="4.5" ry="8" fill="#f4b63f" style="animation-delay:-0.15s"/><ellipse class="fl" cx="110" cy="22" rx="2" ry="4.5" fill="#fff3c4"/></g><rect x="128" y="30" width="6" height="26" rx="2" style="fill:var(--ink)"/><path d="M131 30v-4" stroke-width="1.5" style="stroke:var(--ink)"/><path class="sm" d="M131 24q-5-7 0-13t0-13"/><g class="cf" style="--d:0.3s"><circle cx="131" cy="20" r="15" fill="url(#hg)"/><ellipse class="fl" cx="131" cy="20" rx="4.5" ry="8" fill="#f4b63f" style="animation-delay:-0.3s"/><ellipse class="fl" cx="131" cy="22" rx="2" ry="4.5" fill="#fff3c4"/></g>
         </svg>
       </button>
-      <p class="cake-note hand" id="cakeNote">Chạm vào bánh để thổi nến</p>
+      <p class="cake-note hand" id="cakeNote" aria-live="polite">Chạm vào bánh để thắp nến · 0/3</p>
     </div>
 
     <p class="wish" id="wish"></p>
@@ -182,6 +204,7 @@ h2{margin:0 0 8px;font-size:1.15rem;font-weight:500}
   </div>
 </main>
 
+<div id="dim" aria-hidden="true"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <script>
@@ -382,13 +405,29 @@ const CONFIG = {
   knot.addEventListener("click", ev => { if (ev.detail === 0) unlock(); }); // bàn phím: Enter / Space
   addEventListener("resize", () => { if (raf && !done) { cancelAnimationFrame(raf); raf = 0; startThread(); } });
 
-  // ---- Thổi nến ----
-  const cake = $("cake");
+  // ---- Thắp nến, ước, thổi ----
+  const cake = $("cake"), note = $("cakeNote"), fl = [...cake.querySelectorAll(".cf")];
+  let lit = 0, busy = false;
   cake.addEventListener("click", () => {
-    const out = cake.classList.toggle("out");
-    cake.setAttribute("aria-pressed", out);
-    $("cakeNote").textContent = out ? "Nhắm mắt, ước một điều đi nhé. Đừng nói ra!" : "Chạm vào bánh để thổi nến";
-    if (out) { if (navigator.vibrate) navigator.vibrate(20); if (!reduce) burst(); }
+    if (busy) return;
+    if (navigator.vibrate) navigator.vibrate(12);
+    if (lit < 3) {
+      fl[lit++].classList.add("on");
+      if (lit < 3) note.textContent = "Thắp thêm nến nào · " + lit + "/3";
+      else {
+        document.body.classList.add("night"); cake.setAttribute("aria-label", "Thổi nến");
+        note.textContent = "Nhắm mắt, ước một điều. Xong rồi chạm để thổi nhé!";
+      }
+      return;
+    }
+    busy = true; cake.classList.add("blow", "pop");
+    setTimeout(() => {
+      fl.forEach(f => f.classList.remove("on")); cake.classList.remove("blow");
+      document.body.classList.remove("night");
+      note.textContent = "Điều ước bay đi rồi. Chúc mừng sinh nhật! Chạm để thắp lại.";
+      if (!reduce) celebrate();
+    }, 900);
+    setTimeout(() => { cake.classList.remove("pop"); lit = 0; busy = false; cake.setAttribute("aria-label", "Thắp nến"); }, 1700);
   });
 
   // ---- Hiện dần khi cuộn + sợi chỉ chạy theo trang ----
@@ -406,6 +445,38 @@ const CONFIG = {
   };
   addEventListener("scroll", prog, { passive: true });
   addEventListener("resize", prog);
+
+  // Pháo hoa chỉ màu + confetti
+  function celebrate(){
+    const cv = $("fx"), cx = cv.getContext("2d"), d = Math.min(devicePixelRatio || 1, 2);
+    const W = cv.width = innerWidth * d, H = cv.height = innerHeight * d;
+    const r = cake.getBoundingClientRect(), ox = (r.left + r.width / 2) * d, oy = (r.top + r.height * .2) * d;
+    const cols = ["#f4b63f", "#ff7a9c", "#6fd3ff", "#fff3c4", getComputedStyle(document.documentElement).getPropertyValue("--thread").trim()];
+    const ps = [], R = Math.random;
+    for (let i = 0; i < 70; i++) ps.push({x: ox, y: oy, vx: (R() - .5) * 16 * d, vy: (-R() * 14 - 4) * d, a: R() * 6.28, va: (R() - .5) * .5, life: 140, l: 0, c: cols[i % 5], k: 1});
+    const spark = (x, y) => { const c = cols[R() * 5 | 0]; for (let i = 0; i < 44; i++) { const a = i / 44 * 6.283, v = (3 + R() * 4) * d; ps.push({x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 70 + R() * 30, l: 0, c, k: 0}); } };
+    [0, 350, 700, 1050].forEach((t, i) => setTimeout(() => spark(W * (.2 + .2 * i + R() * .1), H * (.12 + R() * .25)), t));
+    const t0 = performance.now();
+    (function f(){
+      cx.clearRect(0, 0, W, H); cx.lineCap = "round";
+      for (let i = ps.length; i--;) {
+        const p = ps[i], k = 1 - p.l / p.life;
+        if (k <= 0) { ps.splice(i, 1); continue; }
+        cx.globalAlpha = Math.min(1, k * 2); cx.strokeStyle = p.c; cx.beginPath();
+        if (p.k) {
+          p.vy += .35 * d; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.a += p.va;
+          const dx = Math.cos(p.a) * 7 * d, dy = Math.sin(p.a) * 7 * d;
+          cx.lineWidth = 3 * d; cx.moveTo(p.x - dx, p.y - dy); cx.lineTo(p.x + dx, p.y + dy);
+        } else {
+          const px = p.x, py = p.y; p.vy += .06 * d; p.vx *= .965; p.vy *= .965; p.x += p.vx; p.y += p.vy;
+          cx.lineWidth = 2.2 * d; cx.moveTo(px, py); cx.lineTo(p.x, p.y);
+        }
+        cx.stroke(); p.l++;
+      }
+      cx.globalAlpha = 1;
+      if (ps.length || performance.now() - t0 < 1500) requestAnimationFrame(f); else cx.clearRect(0, 0, W, H);
+    })();
+  }
 
   // Confetti = những đường chỉ ngắn
   function burst(){

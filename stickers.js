@@ -6,7 +6,7 @@
    Mỗi sticker là một dòng trong STICKERS bên dưới:
      src     đường dẫn file, ví dụ "images/meo.gif". Để "" thì bỏ qua sticker đó.
      at      dán vào đâu: "cover" (mảnh vải mở đầu), "name" (dòng tên), "photo" (khung ảnh chung),
-             "gift" (ảnh/phần món quà), "caption" (chú thích dưới ảnh quà), "sign" (chữ ký cuối trang),
+             "gift" (ảnh/phần món quà), "caption" (chú thích dưới ảnh quà), "story" (cuối đoạn giới thiệu món quà), "sign" (chữ ký cuối trang),
              "under-photo" (hàng bên dưới tấm ảnh đầu tiên)
      corner  góc của chỗ đó: "tl" trên-trái, "tr" trên-phải, "bl" dưới-trái, "br" dưới-phải
      size    chiều rộng hiển thị, tính bằng px
@@ -20,7 +20,8 @@
     { src: "images/a.gif", at: "caption", inline: true, size: 44, rotate: 0, alt: "" },
     { src: "", at: "cover", corner: "br", size: 88, rotate: 10, alt: "" },
     { src: "images/b.gif", at: "under-photo", side: "left", size: 100, rotate: -5, alt: "Thỏ trái" },
-    { src: "images/c.gif", at: "under-photo", side: "right", size: 100, rotate: 8, alt: "Thỏ phải" }
+    { src: "images/c.gif", at: "under-photo", side: "right", size: 100, rotate: 8, alt: "Thỏ phải" },
+    { src: "images/e.gif", at: "story", inline: true, size: 40, rotate: 0, alt: "" }
   ];
 
   const q = s => document.querySelector(s);
@@ -31,6 +32,7 @@
     "under-photo": () => q("#togetherSlot"),
     gift: () => q("#giftPhotoSlot .photo") || q("#giftTitle"),
     caption: () => q("#giftPhotoSlot figcaption"),
+    story: () => q("#giftStory"),
     sign: () => q("#from")
   };
   const CORNER = {

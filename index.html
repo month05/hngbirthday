@@ -27,6 +27,8 @@ body{margin:0;min-height:100%;background:var(--bg) repeating-linear-gradient(45d
 
 /* Cover */
 .cover{min-height:calc(100svh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:grid;place-items:center;padding:24px}
+.cover.has-photo{background:linear-gradient(rgba(10,14,35,.3),rgba(10,14,35,.45)),var(--cover-img) center 25%/cover no-repeat}
+.cover.has-photo .patch{box-shadow:0 12px 34px rgba(0,0,0,.4)}
 .patch{position:relative;width:100%;max-width:340px;padding:44px 28px 36px;text-align:center;background:var(--cloth);border-radius:14px}
 .patch::before{content:"";position:absolute;inset:9px;border:2px dashed var(--ink);opacity:.5;border-radius:8px;pointer-events:none}
 .patch::after{content:"";position:absolute;top:-15px;left:50%;width:30px;height:30px;margin-left:-15px;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,.25);background:radial-gradient(circle at 38% 38%,var(--cloth) 0 2px,transparent 2.5px),radial-gradient(circle at 62% 38%,var(--cloth) 0 2px,transparent 2.5px),radial-gradient(circle at 38% 62%,var(--cloth) 0 2px,transparent 2.5px),radial-gradient(circle at 62% 62%,var(--cloth) 0 2px,transparent 2.5px),var(--thread)}
@@ -220,6 +222,7 @@ main.pre .wrap>:not(.cake-wrap),main.pre .sp{display:none}
 const CONFIG = {
   name: "hng, Nguyễn Hiếu Ngân",
   from: "— Mon",
+  coverPhoto: "images/cover.jpg",   // ảnh người nhận làm nền bìa (tự bỏ qua nếu chưa có file); để "" nếu không dùng
   wish: "Chúc bé một tuổi mới thật nhiều sức khoẻ, bình yên và những điều vui bất ngờ. Cảm ơn vì đã luôn ở đó. Lớn hơn một chút rồi sau đừng có đánh anh nhé!!!",
   noteTitle: "Đôi lời muốn nói",
   noteText: "Mình yêu bạn. Thật trùng hợp là chúng ta cũng sắp kỉ niệm nửa năm. Thật sự mọi thứ cứ như một giấc mơ vậy. Có lẽ mình nói điều này nhiều rồi, nhưng mà, mình của nửa năm trước sẽ không tin được những gì đang diễn ra đâu",   // viết lời nhắn của bạn vào đây, xuống dòng bằng \n
@@ -253,6 +256,11 @@ const CONFIG = {
   $("coverName").textContent = CONFIG.name;
   $("name").textContent = CONFIG.name + ",";
   $("wish").textContent = CONFIG.wish;
+  if (CONFIG.coverPhoto) {
+    const im = new Image();
+    im.onload = () => { const c = $("cover"); c.style.setProperty("--cover-img", "url(" + JSON.stringify(CONFIG.coverPhoto) + ")"); c.classList.add("has-photo"); };
+    im.src = CONFIG.coverPhoto;
+  }
   $("noteTitle").textContent = CONFIG.noteTitle;
   $("noteText").textContent = CONFIG.noteText || "(Viết đôi lời của bạn vào noteText trong index.html)";
   $("noteText").style.whiteSpace = "pre-line";

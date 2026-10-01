@@ -7,7 +7,7 @@
      src     đường dẫn file, ví dụ "images/meo.gif". Để "" thì bỏ qua sticker đó.
      at      dán vào đâu: "cover" (mảnh vải mở đầu), "name" (dòng tên), "photo" (khung ảnh chung),
              "gift" (ảnh/phần món quà), "caption" (chú thích dưới ảnh quà), "sign" (chữ ký cuối trang),
-             "under-photo" (dưới tấm ảnh đầu tiên)
+             "under-photo" (hàng bên dưới tấm ảnh đầu tiên)
      corner  góc của chỗ đó: "tl" trên-trái, "tr" trên-phải, "bl" dưới-trái, "br" dưới-phải
      size    chiều rộng hiển thị, tính bằng px (khoảng 70-110 là hợp)
      rotate  độ nghiêng, ví dụ 12 hoặc -8
@@ -21,8 +21,8 @@
     { src: "", at: "name",  corner: "tr", size: 80, rotate: -8,  alt: "" },
     { src: "images/a.gif", at: "caption", inline: true, size: 44, rotate: 0, alt: "" },
     { src: "", at: "cover", corner: "br", size: 88, rotate: 10,  alt: "" },
-    { src: "images/b.gif", at: "under-photo", corner: "bl", size: 90, rotate: -5,  alt: "Thỏ trái" },
-    { src: "images/c.gif", at: "under-photo", corner: "br", size: 90, rotate: 8,   alt: "Thỏ phải" }
+    { src: "images/b.gif", at: "under-photo", side: "left",  size: 90, rotate: -5, alt: "Thỏ trái" },
+    { src: "images/c.gif", at: "under-photo", side: "right", size: 90, rotate: 8,  alt: "Thỏ phải" }
   ];
 
   const q = s => document.querySelector(s);
@@ -46,22 +46,36 @@
   st.textContent =
     "body{overflow-x:clip}" +
     ".sticker{position:absolute;z-index:3;height:auto;pointer-events:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.28))}" +
+    ".sticker-row{position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;min-height:90px;margin:14px 10px 0}" +
+    ".sticker-row .sticker{position:static;display:block;flex:0 0 auto}" +
     ".sticker.vid{box-sizing:border-box;background:#fff;border:4px solid #fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.28);filter:none}";
   document.head.appendChild(st);
 
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  // Video chỉ chạy khi đang hiện trên màn hình (phần chính bị ẩn cho tới lúc mở quà)
   const io = "IntersectionObserver" in window
     ? new IntersectionObserver(es => es.forEach(e => {
         if (e.isIntersecting) e.target.play().catch(() => {}); else e.target.pause();
       }), { threshold: 0.1 })
     : null;
 
+  let underPhotoRow;
+  const getHost = s => {
+    const host = (HOSTS[s.at] || (() => null))();
+    if (s.at !== "under-photo" || !host) return host;
+    if (!underPhotoRow) {
+      underPhotoRow = document.createElement("div");
+      underPhotoRow.className = "sticker-row";
+      underPhotoRow.setAttribute("aria-hidden", "true");
+      host.appendChild(underPhotoRow);
+    }
+    return underPhotoRow;
+  };
+
   STICKERS.forEach(s => {
     if (!s || !s.src) return;
-    const host = (HOSTS[s.at] || (() => null))();
+    const host = getHost(s);
     if (!host) return;
-    if (getComputedStyle(host).position === "static") host.style.position = "relative";
+    if (getComputedStyle(host).position === "static" && s.at !== "under-photo") host.style.position = "relative";
 
     const isVid = /\.(mp4|webm|mov|m4v)([?#].*)?$/i.test(s.src);
     let el;
@@ -83,6 +97,12 @@
     el.className = "sticker" + (isVid ? " vid" : "");
     el.onerror = () => { console.warn("Không tải được sticker:", s.src); el.remove(); };
 
+    if (s.at === "under-photo") {
+      el.style.cssText = "width:" + (s.size || 90) + "px;height:auto;transform:rotate(" + (s.rotate || 0) + "deg)";
+      if (s.side === "right") host.appendChild(el);
+      else host.insertBefore(el, host.firstChild);
+      return;
+    }
     if (s.inline) {
       el.style.cssText = "position:static;display:inline-block;vertical-align:middle;margin:-8px 0 -8px 8px;width:" +
         (s.size || 44) + "px;transform:rotate(" + (s.rotate || 0) + "deg)";
